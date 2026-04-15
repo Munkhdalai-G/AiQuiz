@@ -1,5 +1,11 @@
+import QuickTest from "./components/quickTest";
 import Quiz from "./components/quiz";
 
 export default function Home() {
-  return <Quiz />;
+  return (
+    <div>
+      {/* <Quiz /> */}
+      <QuickTest />
+    </div>
+  );
 }
