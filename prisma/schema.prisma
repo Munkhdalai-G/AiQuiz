@@ -1,0 +1,66 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String    @id @default(cuid())
+  clerkId   String    @unique
+  email     String    @unique
+  name      String?
+  createdAt DateTime  @default(now())
+
+  articles  Article[]
+  results   QuizResult[]
+}
+
+model Article {
+  id        String    @id @default(cuid())
+  title     String
+  content   String    // the pasted article
+  summary   String?   // AI generated summary
+  createdAt DateTime  @default(now())
+
+  authorId  String
+  author    User      @relation(fields: [authorId], references: [id])
+
+  questions Question[]
+  results   QuizResult[]
+}
+
+model Question {
+  id         String   @id @default(cuid())
+  text       String
+  order      Int
+
+  articleId  String
+  article    Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+
+  answers    Answer[]
+}
+
+model Answer {
+  id         String   @id @default(cuid())
+  text       String
+  isCorrect  Boolean  @default(false)
+
+  questionId String
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+}
+
+model QuizResult {
+  id          String   @id @default(cuid())
+  score       Int      // e.g. 3
+  totalQ      Int      // e.g. 5
+  completedAt DateTime @default(now())
+
+  userId     String
+  user       User    @relation(fields: [userId], references: [id])
+
+  articleId  String
+  article    Article @relation(fields: [articleId], references: [id])
+}
