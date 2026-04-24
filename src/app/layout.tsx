@@ -30,10 +30,10 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+          className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col h-screen`}
         >
-          <header className="w-full flex justify-between items-center p-4 gap-4 h-16 border-b border-gray-300">
-            <span className="font-bold text-lg">Quiz App</span>
+          <header className="w-full flex justify-between items-center p-4 gap-4 h-16 border-b border-gray-300 shrink-0 z-50 bg-white">
+            <span className="font-bold text-lg">Quiz app</span>
             <Show when="signed-out">
               <div className="flex gap-5">
                 <SignInButton />
@@ -48,7 +48,9 @@ export default function RootLayout({
               <UserButton />
             </Show>
           </header>
-          <AppShell>{children}</AppShell>
+          <div className="flex-1 overflow-hidden">
+            <AppShell>{children}</AppShell>
+          </div>
         </body>
       </html>
     </ClerkProvider>

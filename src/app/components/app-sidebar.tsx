@@ -1,6 +1,11 @@
 "use client";
 import { useEffect, useState } from "react";
-import { Sidebar, SidebarContent, SidebarHeader, SidebarTrigger } from "@/components/ui/sidebar";
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarHeader,
+  SidebarTrigger,
+} from "@/components/ui/sidebar";
 import { BookOpen } from "lucide-react";
 import { ArticleData } from "../page";
 
@@ -17,7 +22,11 @@ type HistoryItem = {
   }[];
 };
 
-export function AppSidebar({ onSelectArticle }: { onSelectArticle?: (article: ArticleData) => void }) {
+export function AppSidebar({
+  onSelectArticle,
+}: {
+  onSelectArticle?: (article: ArticleData, id: string) => void;
+}) {
   const [history, setHistory] = useState<HistoryItem[]>([]);
 
   useEffect(() => {
@@ -29,18 +38,21 @@ export function AppSidebar({ onSelectArticle }: { onSelectArticle?: (article: Ar
 
   function handleClick(item: HistoryItem) {
     if (!onSelectArticle) return;
-    onSelectArticle({
-      title: item.title,
-      summary: item.summary,
-      content: item.content,
-      questions: item.questions
-        .sort((a, b) => a.order - b.order)
-        .map((q) => ({
-          question: q.text,
-          answers: q.answers.map((a) => a.text),
-          correct: q.answers.findIndex((a) => a.isCorrect),
-        })),
-    });
+    onSelectArticle(
+      {
+        title: item.title,
+        summary: item.summary,
+        content: item.content,
+        questions: item.questions
+          .sort((a, b) => a.order - b.order)
+          .map((q) => ({
+            question: q.text,
+            answers: q.answers.map((a) => a.text),
+            correct: q.answers.findIndex((a) => a.isCorrect),
+          })),
+      },
+      item.id,
+    );
   }
 
   return (
